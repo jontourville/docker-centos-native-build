@@ -120,3 +120,11 @@ RUN yum install -y ruby-devel \
     yum clean all && \
     rm -rf /var/cache/yum/* /tmp/* /var/tmp/* && \
     gem install ronn
+
+# Install dependencies for systemd
+RUN yum install -y gperf libcap-devel libmount-devel docbook-xsl \
+    libxslt shtool
+
+# Build libcurl because the CentOS libcurl release is not compatible with the version of Systemd that
+# CentOS releases
+RUN git clone https://github.com/curl/curl.git && cd curl && ./buildconf && ./configure && make install
